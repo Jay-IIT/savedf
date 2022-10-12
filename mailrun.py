@@ -95,7 +95,6 @@ def send_email(dfs):
     msg['Subject'] = "Attrib tool report"
     msg.attach(part1)
     msg.attach(x)
-    
     smtp = smtplib.SMTP('localhost')
     smtp.sendmail(sendFrom, sendTo, msg.as_string())
     smtp.quit()
