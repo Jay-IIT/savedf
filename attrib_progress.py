@@ -11,25 +11,34 @@ class Progress:
         self.__file__ = ".meta/progressdf.pkl"
         self.__runs__ =  ".meta/rundates.pkl"
         self.__pruned_df__ = purned_df
-        self.__progress_df__ = self.__load_progess_df__()
-      
+        self.__load_progess_df__()
+        
+    def get(self):
+        return self.__progress_df__
+
     def __load_progess_df__(self):
         if not (os.path.exists(self.__file__)):
+            try:
+                os.makedirs(".meta")
+            except Exception as e:
+                pass
             df = self.__pruned_df__
-            df['progress'] = self.__pruned_df__['stats']
+            df['progress'] = self.__pruned_df__['Stats']
+            self.__runlist__ = []
         else:
-            with open(self._runs, 'rb') as f:
+            with open(self.__runs__, 'rb') as f:
                 self.__runlist__ = pickle.load(f) 
             df = pd.read_pickle(self.__file__)
             df = df.drop('progress')
-            df = df.rename({'stats': f'stats{self.__runlist__[-1]}'}, axis='columns')
+            df = df.rename({'Stats': f'Stats{self.__runlist__[-1]}'}, axis='columns')
             df = self.__compute_df__(df)
+        self.__progress_df__ = df
         self.__pickle_df__()
-        return df
+        
 
     def __compute_df__(self,df):
         if len(df.columns) > 6:
-            df = df.drop(f'stats{self.__runlist__[0]}')
+            df = df.drop(f'Stats{self.__runlist__[0]}')
             self.__runlist__.pop(0)
         join_df = pd.merge(df[['module','owner','coverage']],self.__pruned_df__[['module','owner','coverage']],
                           left_on=['module','owner'],
