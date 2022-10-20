@@ -44,7 +44,7 @@ class Progress:
             res = ""
             for k,v in stats_curr:
                 if k in stats_prev:
-                    res += f"{int(v)-int(stats_prev[k])}/"
+                    res += f"{int(v)-int(stats_prev[k])}k /"
             return res[:-1]
         return df
     
