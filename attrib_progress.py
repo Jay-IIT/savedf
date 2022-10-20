@@ -52,7 +52,7 @@ class Progress:
         pd.to_pickle(self.__progress_df__,self.__file__)
         self.__runlist__.append(datetime.today().strftime('%m-%d-%y'))
         with open(self.__runs__ , 'wb') as f:
-            pickle.dump(self.__runlist__, f)  
+            pickle.dump(self.__runlist__, f)
 
 
 
