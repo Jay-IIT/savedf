@@ -37,6 +37,17 @@ class Progress:
         
 
     def __compute_df__(self,df):
+        def difference(stats_prev,stats_curr):
+           if stats_prev is np.nan or stats_curr is np.nan:
+               return " "
+           stats_cur =  {list(filter(None, re.split(r'(\d+)', k)))[1]:list(filter(None, re.split(r'(\d+)', k)))[0] for k in stats_curr.split("/")}
+           stats_prev = {list(filter(None, re.split(r'(\d+)', k)))[1]:list(filter(None, re.split(r'(\d+)', k)))[0] for k in stats_prev.split("/")}
+           res = ""
+           for k,v in stats_curr:
+               if k in stats_prev:
+                   res += f"{int(v)-int(stats_prev[k])}k /"
+           return res[:-1]
+        
         if len(df.columns) > 6:
             df = df.drop(f'Stats{self.__runlist__[0]}',axis='columns')
             self.__runlist__.pop(0)
@@ -48,16 +59,7 @@ class Progress:
                           right_on=['module','owner'],how='outer',suffixes=['_df_1','_df_2'])
         df['progress'] = join_df.apply(lambda row : difference(row['Stats_df_1'],row['Stats_df_2']), axis = 1)
 
-        def difference(stats_prev,stats_curr):
-            if stats_prev is np.nan or stats_curr is np.nan:
-                return " "
-            stats_cur =  {list(filter(None, re.split(r'(\d+)', k)))[1]:list(filter(None, re.split(r'(\d+)', k)))[0] for k in stats_curr.split("/")}
-            stats_prev = {list(filter(None, re.split(r'(\d+)', k)))[1]:list(filter(None, re.split(r'(\d+)', k)))[0] for k in stats_prev.split("/")}
-            res = ""
-            for k,v in stats_curr:
-                if k in stats_prev:
-                    res += f"{int(v)-int(stats_prev[k])}k /"
-            return res[:-1]
+       
         return df
     
     def __pickle_df__(self):
