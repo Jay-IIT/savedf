@@ -29,7 +29,7 @@ class Progress:
             with open(self.__runs__, 'rb') as f:
                 self.__runlist__ = pickle.load(f) 
             df = pd.read_pickle(self.__file__)
-            df = df.drop('progress')
+            df = df.drop('progress',axis='columns')
             df = df.rename({'Stats': f'Stats{self.__runlist__[-1]}'}, axis='columns')
             df = self.__compute_df__(df)
         self.__progress_df__ = df
@@ -38,14 +38,13 @@ class Progress:
 
     def __compute_df__(self,df):
         if len(df.columns) > 6:
-            df = df.drop(f'Stats{self.__runlist__[0]}')
+            df = df.drop(f'Stats{self.__runlist__[0]}',axis='columns')
             self.__runlist__.pop(0)
-        join_df = pd.merge(df[['module','owner','coverage']],self.__pruned_df__[['module','owner','coverage']],
+        join_df = pd.merge(df[['module','owner','Coverage']],self.__pruned_df__[['module','owner','Coverage']],
                           left_on=['module','owner'],
                           right_on=['module','owner'],how='outer',suffixes=['_df_1','_df_2'])
-        df['progress'] = join_df.apply(lambda row : difference(row['coverage_df_1'],
-                     row['coverage_df_2']), axis = 1)
-                     
+        df['progress'] = join_df.apply(lambda row : difference(row['Coverage_df_1'],row['Coverage_df_2']), axis = 1)
+
         def difference(stats_prev,stats_curr):
             if stats_prev is np.nan or stats_curr is np.nan:
                 return " "
