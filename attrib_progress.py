@@ -56,7 +56,9 @@ class Progress:
         join_df = pd.merge(df[['module','owner',f'Stats{self.__runlist__[-1]}']],self.__pruned_df__[['module','owner','Stats']],
                           left_on=['module','owner'],
                           right_on=['module','owner'],how='outer',suffixes=['_df_1','_df_2'])
-        print(join_df.columns)
+        print(join_df)
+        print(self.__pruned_df__)
+        print(df)
         df['progress'] = join_df.apply(lambda row : difference(row['Stats_df_1'],row['Stats_df_2']), axis = 1)
 
        
