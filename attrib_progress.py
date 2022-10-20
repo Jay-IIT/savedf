@@ -65,9 +65,7 @@ class Progress:
         
         if len(df.columns) > 6:
             df = df.drop(f'Stats{self.__runlist__[0]}',axis='columns')
-            self.__runlist__.pop(0)
-        
-         
+            self.__runlist__.pop(0) 
         join_df = pd.merge(df[['module','owner',f'Stats{self.__runlist__[-1]}']],self.__pruned_df__[['module','owner','Stats']],
                           left_on=['module','owner'],
                           right_on=['module','owner'],how='outer',suffixes=['_df_1','_df_2'])
