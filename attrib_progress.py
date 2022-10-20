@@ -59,7 +59,7 @@ class Progress:
         print(join_df)
         print(self.__pruned_df__)
         print(df)
-        df['progress'] = join_df.apply(lambda row : difference(row['Stats_df_1'],row['Stats_df_2']), axis = 1)
+        df['progress'] = join_df.apply(lambda row : difference(row[f'Stats{self.__runlist__[-1]}'],row['Stats']), axis = 1)
 
        
         return df
