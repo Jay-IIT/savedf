@@ -44,20 +44,17 @@ class Progress:
            if "/" in stats_curr:
               stats_curr =  {list(filter(None, re.split(r'(\d+)', k)))[1]:list(filter(None, re.split(r'(\d+)', k)))[0] for k in stats_curr.split("/")}
            else:
-              print("No /")
               stats = list(filter(None, re.split(r'(\d+)', stats_curr)))
               stats_curr = {stats[1]:stats[0]}
            if "/" in stats_prev:
               stats_prev = {list(filter(None, re.split(r'(\d+)', k)))[1]:list(filter(None, re.split(r'(\d+)', k)))[0] for k in stats_prev.split("/")}
            else:
-              print("No /")
               stats = list(filter(None, re.split(r'(\d+)', stats_prev)))
               stats_prev = {stats[1]:stats[0]}
-           print("prev value",stats_prev)
-           print("Curr value",stats_curr)
+         
 
            res = ""
-           for k,v in stats_curr:
+           for k,v in stats_curr.items():
                if k in stats_prev:
                    res += f"{int(v)-int(stats_prev[k])}k /"
            return res[:-1]
