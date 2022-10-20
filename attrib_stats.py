@@ -116,7 +116,7 @@ def run_query(queries):
     except Exception as e:
         return False,e
 
-if _name__ == '__main__':
+if __name__ == '__main__':
     try:
         try:
             if(len(sys.argv) > 2 and "-s" in sys.argv):

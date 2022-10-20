@@ -12,7 +12,7 @@ class Progress:
         self.__runs__ =  ".meta/rundates.pkl"
         self.__pruned_df__ = purned_df
         self.__load_progess_df__()
-        
+
     def get(self):
         return self.__progress_df__
 
@@ -45,6 +45,7 @@ class Progress:
                           right_on=['module','owner'],how='outer',suffixes=['_df_1','_df_2'])
         df['progress'] = join_df.apply(lambda row : difference(row['coverage_df_1'],
                      row['coverage_df_2']), axis = 1)
+                     
         def difference(stats_prev,stats_curr):
             if stats_prev is np.nan or stats_curr is np.nan:
                 return " "
