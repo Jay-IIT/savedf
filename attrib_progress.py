@@ -40,6 +40,8 @@ class Progress:
         def difference(stats_prev,stats_curr):
            if stats_prev is np.nan or stats_curr is np.nan:
                return " "
+           print("prev value",stats_prev)
+           print("Curr value",stats_curr)
            stats_cur =  {list(filter(None, re.split(r'(\d+)', k)))[1]:list(filter(None, re.split(r'(\d+)', k)))[0] for k in stats_curr.split("/")}
            stats_prev = {list(filter(None, re.split(r'(\d+)', k)))[1]:list(filter(None, re.split(r'(\d+)', k)))[0] for k in stats_prev.split("/")}
            res = ""
@@ -56,9 +58,6 @@ class Progress:
         join_df = pd.merge(df[['module','owner',f'Stats{self.__runlist__[-1]}']],self.__pruned_df__[['module','owner','Stats']],
                           left_on=['module','owner'],
                           right_on=['module','owner'],how='outer',suffixes=['_df_1','_df_2'])
-        print(join_df)
-        print(self.__pruned_df__)
-        print(df)
         df['progress'] = join_df.apply(lambda row : difference(row[f'Stats{self.__runlist__[-1]}'],row['Stats']), axis = 1)
 
        
