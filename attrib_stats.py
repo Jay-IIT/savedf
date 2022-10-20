@@ -12,7 +12,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email import encoders
 import numpy as np
-
+from attrib_progress import Progress 
 USER = os.environ.get('USER', None)
 def get_date():
     now = datetime.now()
@@ -23,7 +23,7 @@ def get_stats(dfs):
     map_stats = {"Total":0,"Covered":0,"Reviewed Test":0,"Reviewed Attribute":0, "Obsolete":0,"Partial":0,"Not Covered":0,"Bug Opened":0, "Eye Checked":0, 
             "P + BO":0, "C + P + BO":0}
     tot_summary = dfs[0].groupby("coverage").size()
-    #tot_summary.apply(print)
+    
 
     for k,v in tot_summary.items():
         map_stats["Total"] += int(v)
@@ -56,10 +56,11 @@ def get_stats(dfs):
             stats_df.at[match[0],"Stats"] = stats_df.iloc[match[0]]["Stats"] + "/" + r["Stats"]
         else:
             stats_df = stats_df.append(r,ignore_index=True)
-
-    #print(purned_blocks_df)
-    #sys.exit()
-    return purned_blocks_df, stats_df, tot_summary
+    progress_df = Progress(purned_blocks_df).get()
+    
+    
+ 
+    return purned_blocks_df, stats_df, tot_summary,progress_df
 
 def send_email(dfs):
     sendFrom = 'kmalempa@cisco.com'
@@ -69,13 +70,11 @@ def send_email(dfs):
 
     filename = "report.xlsx"
     ExcelWriter= pd.ExcelWriter(filename,engine="xlsxwriter")
-    #for idx, df in enumerate(dfs,1):
-    #    df.to_excel(ExcelWriter, sheet_name="Sheet-%s"%idx, index=False)
-    #    print(df.head())
-    purned_blocks_df, summary_df, stats_df=get_stats(dfs)
+    purned_blocks_df, summary_df, stats_df,progresss_df=get_stats(dfs)
     summary_df.to_excel(ExcelWriter, sheet_name="Blocks_Summary", index=False)
     purned_blocks_df.to_excel(ExcelWriter, sheet_name="Pruned_Blocks_Summary", index=False)
     stats_df.to_excel(ExcelWriter, sheet_name="Total_Summary", index=False)
+    progresss_df.to_excel(ExcelWriter, sheet_name="Progress_Summary", index=False)
     
     ExcelWriter.save()
     ExcelWriter.close()
@@ -117,7 +116,7 @@ def run_query(queries):
     except Exception as e:
         return False,e
 
-if _name== 'main_':
+if _name__ == 'main_':
     try:
         try:
             if(len(sys.argv) > 2 and "-s" in sys.argv):
