@@ -44,11 +44,9 @@ class Progress:
             res = ""
             for k,v in stats_curr:
                 if k in stats_prev:
-                    res += f"{v-stats_prev[k]}/"
+                    res += f"{int(v)-int(stats_prev[k])}/"
             return res[:-1]
         return df
-
-
     
     def __pickle_df__(self):
         pd.to_pickle(self.__progress_df__,self.__file__)
@@ -56,11 +54,7 @@ class Progress:
         with open(self.__runs__ , 'wb') as f:
             pickle.dump(self.__runlist__, f)  
 
-  
- 
 
 
 
-
-Progress()
  
