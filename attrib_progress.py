@@ -39,11 +39,18 @@ class Progress:
     def __compute_df__(self,df):
         def difference(stats_prev,stats_curr):
            if stats_prev is np.nan or stats_curr is np.nan:
-               return " "
+              return " "
            print("prev value",stats_prev)
            print("Curr value",stats_curr)
-           stats_cur =  {list(filter(None, re.split(r'(\d+)', k)))[1]:list(filter(None, re.split(r'(\d+)', k)))[0] for k in stats_curr.split("/")}
-           stats_prev = {list(filter(None, re.split(r'(\d+)', k)))[1]:list(filter(None, re.split(r'(\d+)', k)))[0] for k in stats_prev.split("/")}
+           if "/" in stats_curr:
+              stats_curr =  {list(filter(None, re.split(r'(\d+)', k)))[1]:list(filter(None, re.split(r'(\d+)', k)))[0] for k in stats_curr.split("/")}
+           else:
+              stats_curr = {list(filter(None, re.split(r'(\d+)', stats_curr)))[1]:list(filter(None, re.split(r'(\d+)', k)))[0]}
+           if "/" in stats_prev:
+              stats_prev = {list(filter(None, re.split(r'(\d+)', k)))[1]:list(filter(None, re.split(r'(\d+)', k)))[0] for k in stats_prev.split("/")}
+           else:
+              stats_prev = {list(filter(None, re.split(r'(\d+)', stats_prev)))[1]:list(filter(None, re.split(r'(\d+)', stats_prev)))[0]}  
+           
            res = ""
            for k,v in stats_curr:
                if k in stats_prev:
