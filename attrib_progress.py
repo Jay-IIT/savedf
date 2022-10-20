@@ -31,6 +31,7 @@ class Progress:
             df = pd.read_pickle(self.__file__)
             df = df.drop('progress',axis='columns')
             df = df.rename({'Stats': f'Stats{self.__runlist__[-1]}'}, axis='columns')
+            df['Stats'] = self.__pruned_df__['Stats']
             df = self.__compute_df__(df)
         self.__progress_df__ = df
         self.__pickle_df__()
