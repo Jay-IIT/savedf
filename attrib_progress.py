@@ -30,7 +30,10 @@ class Progress:
                 self.__runlist__ = pickle.load(f) 
             df = pd.read_pickle(self.__file__)
             df = df.drop('progress',axis='columns')
-            df = df.rename({'Stats': f'Stats{self.__runlist__[-1]}'}, axis='columns')
+            try:
+                df = df.rename({'Stats': f'Stats{self.__runlist__[-1]}'}, axis='columns')
+            except Exception as e:
+                pass
             df['Stats'] = self.__pruned_df__['Stats']
             df = self.__compute_df__(df)
         self.__progress_df__ = df
