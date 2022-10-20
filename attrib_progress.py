@@ -45,7 +45,7 @@ class Progress:
            if "/" in stats_curr:
               stats_curr =  {list(filter(None, re.split(r'(\d+)', k)))[1]:list(filter(None, re.split(r'(\d+)', k)))[0] for k in stats_curr.split("/")}
            else:
-              stats_curr = {list(filter(None, re.split(r'(\d+)', stats_curr)))[1]:list(filter(None, re.split(r'(\d+)', k)))[0]}
+              stats_curr = {list(filter(None, re.split(r'(\d+)', stats_curr)))[1]:list(filter(None, re.split(r'(\d+)', stats_curr)))[0]}
            if "/" in stats_prev:
               stats_prev = {list(filter(None, re.split(r'(\d+)', k)))[1]:list(filter(None, re.split(r'(\d+)', k)))[0] for k in stats_prev.split("/")}
            else:
