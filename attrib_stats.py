@@ -57,7 +57,7 @@ def get_stats(dfs):
         else:
             stats_df = stats_df.append(r,ignore_index=True)
     progress_df = Progress(purned_blocks_df).get()
-    
+    progress_df.to_excel("Progress.xlsx")
     
  
     return purned_blocks_df, stats_df, tot_summary,progress_df
