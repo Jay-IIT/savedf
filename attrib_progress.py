@@ -65,7 +65,7 @@ class Progress:
                         res += f"{int(v)-int(stats_prev[k])}{k}/"
                 return res[:-1]
             except Exception as e:
-                print(traceback.format_exc)
+                traceback.print_exc()
         
         if len(df.columns) > 6:
             df = df.drop(f'Stats{self.__runlist__[0]}',axis='columns')
