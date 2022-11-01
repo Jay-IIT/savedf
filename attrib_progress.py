@@ -5,6 +5,7 @@ import glob
 from datetime import datetime
 import numpy as np 
 import re 
+import traceback
 
 class Progress:
     def __init__(self,purned_df):
@@ -42,26 +43,29 @@ class Progress:
 
     def __compute_df__(self,df):
         def difference(stats_prev,stats_curr):
-           if stats_prev is np.nan or stats_curr is np.nan:
-              return " "
+            try:
+                if stats_prev is np.nan or stats_curr is np.nan:
+                    return " "
+                stats_prev = stats_prev.str.split()[1][0]
+                if "/" in stats_curr:
+                    stats_curr =  {list(filter(None, re.split(r'(\d+)', k)))[1]:list(filter(None, re.split(r'(\d+)', k)))[0] for k in stats_curr.split("/")}
+                elif stats_curr:
+                    stats = list(filter(None, re.split(r'(\d+)', stats_curr)))
+                    stats_curr = {stats[1]:stats[0]}
+                if "/" in stats_prev:
+                    stats_prev = {list(filter(None, re.split(r'(\d+)', k)))[1]:list(filter(None, re.split(r'(\d+)', k)))[0] for k in stats_prev.split("/")}
+                elif stats_prev:
+                    stats = list(filter(None, re.split(r'(\d+)', stats_prev)))
+                    stats_prev = {stats[1]:stats[0]}
+                
 
-           if "/" in stats_curr:
-              stats_curr =  {list(filter(None, re.split(r'(\d+)', k)))[1]:list(filter(None, re.split(r'(\d+)', k)))[0] for k in stats_curr.split("/")}
-           else:
-              stats = list(filter(None, re.split(r'(\d+)', stats_curr)))
-              stats_curr = {stats[1]:stats[0]}
-           if "/" in stats_prev:
-              stats_prev = {list(filter(None, re.split(r'(\d+)', k)))[1]:list(filter(None, re.split(r'(\d+)', k)))[0] for k in stats_prev.split("/")}
-           else:
-              stats = list(filter(None, re.split(r'(\d+)', stats_prev)))
-              stats_prev = {stats[1]:stats[0]}
-         
-
-           res = ""
-           for k,v in stats_curr.items():
-               if k in stats_prev:
-                   res += f"{int(v)-int(stats_prev[k])}{k}/"
-           return res[:-1]
+                res = ""
+                for k,v in stats_curr.items():
+                    if k in stats_prev:
+                        res += f"{int(v)-int(stats_prev[k])}{k}/"
+                return res[:-1]
+            except Exception as e:
+                print(traceback.format_exc)
         
         if len(df.columns) > 6:
             df = df.drop(f'Stats{self.__runlist__[0]}',axis='columns')
