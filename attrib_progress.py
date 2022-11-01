@@ -46,7 +46,11 @@ class Progress:
             try:
                 if stats_prev is np.nan or stats_curr is np.nan:
                     return " "
-                stats_prev = stats_prev.str.split()[1][0]
+                try:
+                    stats_prev = stats_prev.str.split()[1][0]
+                except Exception as e:
+                    stats_prev = ""
+                    pass
                 if "/" in stats_curr:
                     stats_curr =  {list(filter(None, re.split(r'(\d+)', k)))[1]:list(filter(None, re.split(r'(\d+)', k)))[0] for k in stats_curr.split("/")}
                 elif stats_curr:
